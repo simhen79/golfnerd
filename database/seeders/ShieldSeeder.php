@@ -14,7 +14,7 @@ class ShieldSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $tenants = '[]';
-        $users = '[]';
+        $users = '[henry@simit.co.za]';
         $userTenantPivot = '[]';
         $rolesWithPermissions = '[{"name":"super_admin","guard_name":"web","permissions":[]}]';
         $directPermissions = '[]';
