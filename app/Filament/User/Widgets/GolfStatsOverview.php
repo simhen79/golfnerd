@@ -15,7 +15,7 @@ class GolfStatsOverview extends StatsOverviewWidget
 
         $stats = GolfRound::where('user_id', $user->id)
             ->selectRaw('
-                COUNT(*) as total_rounds,
+                SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END) as total_rounds,
                 SUM(eagles) as total_eagles,
                 SUM(birdies) as total_birdies,
                 SUM(putts) as total_putts,

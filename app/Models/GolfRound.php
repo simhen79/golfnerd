@@ -10,6 +10,7 @@ class GolfRound extends Model
     protected $fillable = [
         'user_id',
         'golf_course_id',
+        'holes_played',
         'date_played',
         'eagles',
         'birdies',

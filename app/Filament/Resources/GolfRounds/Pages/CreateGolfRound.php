@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateGolfRound extends CreateRecord
 {
     protected static string $resource = GolfRoundResource::class;
+
+    protected function afterCreate(mixed $record, ?string $redirectUrl = null): ?string
+    {
+
+    }
 }

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <radialGradient id="ballGradient" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e0e0;stop-opacity:1" />
+    </radialGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Golf Ball Base -->
+  <circle cx="50" cy="50" r="40" fill="url(#ballGradient)" filter="url(#shadow)"/>
+
+  <!-- Dimples -->
+  <circle cx="30" cy="30" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="45" cy="25" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="60" cy="28" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="75" cy="32" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="25" cy="45" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="40" cy="48" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="60" cy="48" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="78" cy="46" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="28" cy="62" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="45" cy="68" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="65" cy="65" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="48" cy="80" r="3" fill="rgba(0,0,0,0.05)"/>
+  <circle cx="65" cy="78" r="3" fill="rgba(0,0,0,0.05)"/>
+
+  <!-- Shine -->
+  <circle cx="70" cy="30" r="6" fill="rgba(255,255,255,0.8)"/>
+
+  <!-- Glasses -->
+  <!-- Left Frame -->
+  <circle cx="38" cy="45" r="11" stroke="#0ea5e9" stroke-width="3" fill="rgba(14,165,233,0.15)"/>
+  <!-- Right Frame -->
+  <circle cx="62" cy="45" r="11" stroke="#0ea5e9" stroke-width="3" fill="rgba(14,165,233,0.15)"/>
+  <!-- Bridge -->
+  <rect x="46" y="43" width="8" height="3" rx="1.5" fill="#0ea5e9"/>
+</svg>

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,11 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             GolfClubTableSeeder::class,
-        ]);
-
-        User::factory()->create([
-            'name' => 'Henry Sim',
-            'email' => 'henry@simit.co.za',
+            ShieldSeeder::class,
         ]);
     }
 }

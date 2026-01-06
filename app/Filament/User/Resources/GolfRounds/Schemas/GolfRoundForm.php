@@ -8,6 +8,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use App\Models\GolfCourse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class GolfRoundForm
 {
@@ -21,15 +23,29 @@ class GolfRoundForm
                             ->label('Date Played')
                             ->required()
                             ->maxDate(now())
-                            ->native(false),
+                            ->native(false)
+                            /*->unique('golf_rounds', 'date_played', ignoreRecord: true, modifyRuleUsing: function ($rule, $context) {
+                                return $rule->where('user_id', Auth::id());
+                            })
+                            ->validationMessages([
+                                'unique' => 'You have already entered a round for this date.',
+                            ])*/,
                         Select::make('golf_course_id')
                             ->label('Golf Course')
                             ->options(GolfCourse::all()->pluck('name', 'id'))
                             ->searchable()
                             ->required()
                             ->preload(),
+                        Select::make('holes_played')
+                            ->label('Holes Played')
+                            ->options([
+                                9 => '9 Holes',
+                                18 => '18 Holes',
+                            ])
+                            ->default(18)
+                            ->required(),
                     ])
-                    ->columns(2),
+                    ->columns(3),
                 Section::make('Scoring')
                     ->schema([
                         TextInput::make('eagles')
@@ -53,6 +69,7 @@ class GolfRoundForm
                             ->label('Total Putts')
                             ->numeric()
                             ->minValue(0)
+                            ->default(0)
                             ->required(),
                         TextInput::make('bogeys')
                             ->label('Bogeys')
@@ -61,7 +78,7 @@ class GolfRoundForm
                             ->minValue(0)
                             ->required(),
                         TextInput::make('double_bogeys_or_worse')
-                            ->label('Double Bogeys or Worse')
+                            ->label('Double Bogeys (or worse)')
                             ->numeric()
                             ->default(0)
                             ->minValue(0)
@@ -71,7 +88,8 @@ class GolfRoundForm
                             ->numeric()
                             ->minValue(0),
                     ])
-                    ->columns(3),
-            ]);
+                    ->columns(2),
+            ])
+            ->columns(1);
     }
 }

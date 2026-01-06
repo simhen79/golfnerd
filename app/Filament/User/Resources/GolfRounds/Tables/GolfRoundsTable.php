@@ -2,7 +2,9 @@
 
 namespace App\Filament\User\Resources\GolfRounds\Tables;
 
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -46,7 +48,11 @@ class GolfRoundsTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make()
+                        ->slideOver(),
+                    DeleteAction::make(),
+                ]),
             ])
             ->toolbarActions([])
             ->defaultSort('date_played', 'desc');
