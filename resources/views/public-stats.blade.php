@@ -77,7 +77,7 @@
             </div>
 
             <!-- Top 10 Charts Section -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <!-- Top 10 Birdies Chart -->
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Top 10 - Most Birdies</h3>
@@ -99,6 +99,14 @@
                     <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Top 10 - Most Rounds</h3>
                     <div class="h-80">
                         <canvas id="topRoundsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top 10 Least Putts Chart -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Top 10 - Least Putts</h3>
+                    <div class="h-80">
+                        <canvas id="leastPuttsChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -327,6 +335,54 @@
         new Chart(document.getElementById('topRoundsChart'), {
             type: 'bar',
             data: topRoundsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // Least Putts Chart
+        const leastPuttsData = {
+            labels: [
+                @foreach($leastPutts as $stat)
+                    '{{ $stat->name }}',
+                @endforeach
+            ],
+            datasets: [{
+                label: 'Avg Putts',
+                data: [
+                    @foreach($leastPutts as $stat)
+                        {{ $stat->avg_putts_per_round }},
+                    @endforeach
+                ],
+                backgroundColor: 'rgba(109, 40, 217, 0.8)',
+                borderColor: 'rgba(109, 40, 217, 1)',
+                borderWidth: 2
+            }]
+        };
+
+        new Chart(document.getElementById('leastPuttsChart'), {
+            type: 'bar',
+            data: leastPuttsData,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
