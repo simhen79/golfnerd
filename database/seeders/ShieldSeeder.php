@@ -17,9 +17,7 @@ class ShieldSeeder extends Seeder
     {
         $this->command->info('Installing Filament Shield...');
 
-        Artisan::call('shield:install', [
-            '--minimal' => false,
-        ]);
+        Artisan::call('shield:install');
 
         $this->command->info('Shield installed successfully.');
 
