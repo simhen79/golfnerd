@@ -49,6 +49,16 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    /**
+     * Boot the model.
+     */
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            $user->assignRole('User');
+        });
+    }
+
     public function golfRounds()
     {
         return $this->hasMany(GolfRound::class);
