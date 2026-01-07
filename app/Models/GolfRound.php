@@ -14,6 +14,7 @@ class GolfRound extends Model
         'date_played',
         'eagles',
         'birdies',
+        'pars',
         'putts',
         'bogeys',
         'double_bogeys_or_worse',
