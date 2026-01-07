@@ -1,9 +1,9 @@
 <div class="space-y-4" x-data="{ copied: false }">
-    <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center justify-between mb-2">
         <span class="text-sm text-gray-600 dark:text-gray-400">Preview (click button below to copy)</span>
         <span x-show="copied" x-transition class="text-sm text-success-600 dark:text-success-400 font-medium">✓ Copied!</span>
     </div>
-    <br/>
+
     <div class="rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-4">
         <pre class="text-sm font-mono text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{{ $message }}</pre>
     </div>

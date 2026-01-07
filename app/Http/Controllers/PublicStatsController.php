@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\GolfRound;
 use App\Models\User;
+use App\Services\RankingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PublicStatsController extends Controller
 {
-    public function index()
+    public function index(RankingService $rankingService)
     {
         $userStats = User::join('golf_rounds', 'users.id', '=', 'golf_rounds.user_id')
             ->select(
@@ -31,6 +32,20 @@ class PublicStatsController extends Controller
             ->orderBy('total_birdies', 'desc')
             ->orderBy('total_rounds', 'desc')
             ->get();
+
+        // Add ranking positions and deltas
+        $rankingsWithDeltas = $rankingService->getRankingsWithDeltas()->keyBy('id');
+        $userStats = $userStats->map(function ($stat) use ($rankingsWithDeltas) {
+            $ranking = $rankingsWithDeltas->get($stat->id);
+            if ($ranking) {
+                $stat->ranking_position = $ranking->ranking_position;
+                $stat->delta = $ranking->delta ?? 0;
+            } else {
+                $stat->ranking_position = null;
+                $stat->delta = 0;
+            }
+            return $stat;
+        });
 
         $aggregateStats = GolfRound::selectRaw('
                 COALESCE(SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 0) as total_rounds,

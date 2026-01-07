@@ -23,13 +23,7 @@ class GolfRoundForm
                             ->label('Date Played')
                             ->required()
                             ->maxDate(now())
-                            ->native(false)
-                            /*->unique('golf_rounds', 'date_played', ignoreRecord: true, modifyRuleUsing: function ($rule, $context) {
-                                return $rule->where('user_id', Auth::id());
-                            })
-                            ->validationMessages([
-                                'unique' => 'You have already entered a round for this date.',
-                            ])*/,
+                            ->native(false),
                         Select::make('golf_course_id')
                             ->label('Golf Course')
                             ->options(GolfCourse::all()->pluck('name', 'id'))

@@ -4,6 +4,7 @@ namespace App\Filament\User\Resources\GolfRounds\Pages;
 
 use App\Filament\User\Resources\GolfRounds\GolfRoundResource;
 use App\Models\User;
+use App\Services\RankingService;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
@@ -85,27 +86,16 @@ class ListGolfRounds extends ListRecords
 
     protected function getFormattedStats(): array
     {
-        return User::select('users.name')
-            ->selectRaw('SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END) as total_rounds')
-            ->selectRaw('COALESCE(SUM(golf_rounds.birdies), 0) as total_birdies')
-            ->selectRaw('COALESCE(SUM(golf_rounds.eagles), 0) as total_eagles')
-            ->selectRaw('COALESCE(SUM(golf_rounds.putts), 0) as total_putts')
-            ->leftJoin('golf_rounds', 'users.id', '=', 'golf_rounds.user_id')
-            ->groupBy('users.id', 'users.name')
-            ->havingRaw('COUNT(golf_rounds.id) > 0')
-            ->orderByRaw('COALESCE(SUM(golf_rounds.birdies), 0) DESC')
-            ->orderBy('users.name')
-            ->get()
-            ->toArray();
+        $rankingService = app(RankingService::class);
+        return $rankingService->getRankingsWithDeltas()->toArray();
     }
 
     protected function formatStatsForWhatsApp(array $stats): string
     {
         $lines = ['Birdies Leaderboard ' . now()->year . ' 🏌️', ''];
 
-        foreach ($stats as $index => $stat) {
-            $position = $index + 1;
-            $lines[] = "{$position}. {$stat['name']} - Rounds: {$stat['total_rounds']}, Birdies: {$stat['total_birdies']}, Eagles: {$stat['total_eagles']},  Putts: {$stat['total_putts']}";
+        foreach ($stats as $stat) {
+            $lines[] = "{$stat['name']} - Rounds: {$stat['total_rounds']}, Birdies: {$stat['total_birdies']}, Putts: {$stat['total_putts']}";
         }
 
         $lines[] = '';

@@ -3,14 +3,18 @@
 namespace App\Filament\Resources\GolfRounds\Pages;
 
 use App\Filament\Resources\GolfRounds\GolfRoundResource;
+use App\Services\RankingService;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateGolfRound extends CreateRecord
 {
     protected static string $resource = GolfRoundResource::class;
 
-    protected function afterCreate(mixed $record, ?string $redirectUrl = null): ?string
+    protected function afterCreate(): void
     {
+        $rankingService = app(RankingService::class);
 
+        // Capture the new snapshot after this round
+        $rankingService->captureSnapshot();
     }
 }
