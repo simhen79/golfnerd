@@ -28,7 +28,7 @@ class PublicStatsController extends Controller
                 DB::raw('ROUND(SUM(golf_rounds.putts)::numeric / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_putts_per_round')
             )
             ->groupBy('users.id', 'users.name')
-            ->orderBy('birdies', 'desc')
+            ->orderBy('total_birdies', 'desc')
             ->orderBy('total_rounds', 'desc')
             ->get();
 
