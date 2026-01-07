@@ -44,6 +44,10 @@
                         <div class="text-sm text-gray-600 mt-1">Birdies</div>
                     </div>
                     <div class="text-center">
+                        <div class="text-3xl font-bold text-blue-600">{{ $aggregateStats->total_pars ?? 0 }}</div>
+                        <div class="text-sm text-gray-600 mt-1">Pars</div>
+                    </div>
+                    <div class="text-center">
                         <div class="text-3xl font-bold text-gray-600">{{ $aggregateStats->total_putts ?? 0 }}</div>
                         <div class="text-sm text-gray-600 mt-1">Total Putts</div>
                     </div>
@@ -139,6 +143,12 @@
                                     Avg Birdies
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Pars
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Avg Pars
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Putts
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -172,6 +182,12 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-600">{{ $stat->avg_birdies_per_round ?? 0 }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{ $stat->total_pars }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-600">{{ $stat->avg_pars_per_round ?? 0 }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $stat->total_putts }}</div>

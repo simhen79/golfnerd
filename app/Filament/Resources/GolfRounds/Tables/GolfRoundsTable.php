@@ -32,6 +32,9 @@ class GolfRoundsTable
                 TextColumn::make('birdies')
                     ->label('Birdies')
                     ->sortable(),
+                TextColumn::make('pars')
+                    ->label('Pars')
+                    ->sortable(),
                 TextColumn::make('putts')
                     ->label('Putts')
                     ->sortable(),

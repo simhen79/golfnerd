@@ -18,6 +18,7 @@ class GolfStatsOverview extends StatsOverviewWidget
                 SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END) as total_rounds,
                 SUM(eagles) as total_eagles,
                 SUM(birdies) as total_birdies,
+                SUM(pars) as total_pars,
                 SUM(putts) as total_putts,
                 SUM(bogeys) as total_bogeys,
                 SUM(double_bogeys_or_worse) as total_double_bogeys
@@ -35,6 +36,10 @@ class GolfStatsOverview extends StatsOverviewWidget
                 ->color('warning'),
             Stat::make('Birdies', $stats->total_birdies ?? 0)
                 ->description('Total birdies scored')
+                ->descriptionIcon('heroicon-m-star')
+                ->color('info'),
+            Stat::make('Pars', $stats->total_pars ?? 0)
+                ->description('Total pars scored')
                 ->descriptionIcon('heroicon-m-star')
                 ->color('info'),
             Stat::make('Total Putts', $stats->total_putts ?? 0)
