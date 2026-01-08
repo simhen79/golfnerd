@@ -107,8 +107,7 @@ class GolfRoundForm
                             ->default(0)
                             ->required()
                             ->rules(function ($get) {
-                                $holesPlayed = $get('holes_played') ?? 18;
-                                return ['numeric', 'required', 'min:0', "max:{$holesPlayed}"];
+                                return ['numeric', 'required', 'min:0'];
                             }),
                         TextInput::make('score')
                             ->label('Total Score (Optional)')
