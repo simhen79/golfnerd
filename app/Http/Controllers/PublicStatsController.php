@@ -29,8 +29,6 @@ class PublicStatsController extends Controller
                 DB::raw('ROUND(SUM(golf_rounds.putts)::numeric / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_putts_per_round')
             )
             ->groupBy('users.id', 'users.name')
-            ->orderBy('total_birdies', 'desc')
-            ->orderBy('total_rounds', 'desc')
             ->get();
 
         // Add ranking positions and deltas
@@ -45,7 +43,7 @@ class PublicStatsController extends Controller
                 $stat->delta = 0;
             }
             return $stat;
-        });
+        })->sortBy('ranking_position');
 
         $aggregateStats = GolfRound::selectRaw('
                 COALESCE(SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 0) as total_rounds,
