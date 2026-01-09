@@ -46,7 +46,7 @@ class PublicStatsController extends Controller
         })->sortBy([
             ['ranking_position', 'asc'],
             ['total_birdies', 'desc'],
-            ['total_rounds', 'desc']
+            ['total_rounds', 'asc']
         ]);
 
         $aggregateStats = GolfRound::selectRaw('
