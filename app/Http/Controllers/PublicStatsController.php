@@ -43,7 +43,11 @@ class PublicStatsController extends Controller
                 $stat->delta = 0;
             }
             return $stat;
-        })->sortBy('ranking_position');
+        })->sortBy([
+            ['ranking_position', 'asc'],
+            ['total_birdies', 'desc'],
+            ['total_rounds', 'desc']
+        ]);
 
         $aggregateStats = GolfRound::selectRaw('
                 COALESCE(SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 0) as total_rounds,
