@@ -11,7 +11,7 @@ class RankingService
 {
     public function getCurrentRankings(): Collection
     {
-        return User::select('users.id', 'users.name')
+        $users = User::select('users.id', 'users.name')
             ->selectRaw('SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END) as total_rounds')
             ->selectRaw('COALESCE(SUM(golf_rounds.birdies), 0) as total_birdies')
             ->selectRaw('COALESCE(SUM(golf_rounds.eagles), 0) as total_eagles')
@@ -22,11 +22,28 @@ class RankingService
             ->orderByRaw('COALESCE(SUM(golf_rounds.birdies), 0) DESC')
             ->orderByRaw('SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END) DESC')
             ->orderBy('users.name')
-            ->get()
-            ->map(function ($user, $index) {
-                $user->ranking_position = $index + 1;
-                return $user;
-            });
+            ->get();
+
+        // Assign ranking positions with proper tie handling
+        $currentRank = 1;
+        $previousBirdies = null;
+        $usersWithSameBirdies = 0;
+
+        return $users->map(function ($user, $index) use (&$currentRank, &$previousBirdies, &$usersWithSameBirdies) {
+            if ($previousBirdies !== null && $user->total_birdies < $previousBirdies) {
+                // Different birdie count, advance rank by the number of users with same birdies
+                $currentRank += $usersWithSameBirdies;
+                $usersWithSameBirdies = 1;
+            } else {
+                // Same birdie count as previous user (or first user)
+                $usersWithSameBirdies++;
+            }
+
+            $user->ranking_position = $currentRank;
+            $previousBirdies = $user->total_birdies;
+
+            return $user;
+        });
     }
 
     public function captureSnapshot(): void
