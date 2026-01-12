@@ -112,6 +112,40 @@ class PublicStatsController extends Controller
             ->limit(10)
             ->get();
 
-        return view('public-stats', compact('userStats', 'aggregateStats', 'topBirdies', 'topEagles', 'topRounds', 'leastPutts'));
+        // Time series data for birdies over time
+        $birdiesOverTime = GolfRound::select(
+                'date_played',
+                DB::raw('SUM(birdies) as daily_birdies')
+            )
+            ->groupBy('date_played')
+            ->orderBy('date_played')
+            ->get()
+            ->map(function ($item, $index) use (&$cumulativeBirdies) {
+                static $cumulative = 0;
+                $cumulative += $item->daily_birdies;
+                return [
+                    'date' => $item->date_played,
+                    'cumulative' => $cumulative
+                ];
+            });
+
+        // Time series data for rounds over time
+        $roundsOverTime = GolfRound::select(
+                'date_played',
+                DB::raw('SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END) as daily_rounds')
+            )
+            ->groupBy('date_played')
+            ->orderBy('date_played')
+            ->get()
+            ->map(function ($item) {
+                static $cumulative = 0;
+                $cumulative += $item->daily_rounds;
+                return [
+                    'date' => $item->date_played,
+                    'cumulative' => $cumulative
+                ];
+            });
+
+        return view('public-stats', compact('userStats', 'aggregateStats', 'topBirdies', 'topEagles', 'topRounds', 'leastPutts', 'birdiesOverTime', 'roundsOverTime'));
     }
 }

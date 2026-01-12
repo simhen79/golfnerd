@@ -16,6 +16,7 @@ class RankingService
             ->selectRaw('COALESCE(SUM(golf_rounds.birdies), 0) as total_birdies')
             ->selectRaw('COALESCE(SUM(golf_rounds.eagles), 0) as total_eagles')
             ->selectRaw('COALESCE(SUM(golf_rounds.putts), 0) as total_putts')
+            ->selectRaw('ROUND(COALESCE(SUM(golf_rounds.putts), 0) / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 1) as avg_putts')
             ->leftJoin('golf_rounds', 'users.id', '=', 'golf_rounds.user_id')
             ->groupBy('users.id', 'users.name')
             ->havingRaw('COUNT(golf_rounds.id) > 0')

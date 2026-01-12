@@ -46,7 +46,7 @@ class CreateGolfRound extends CreateRecord
         $lines = ['Birdies Leaderboard ' . now()->year . ' 🏌️', ''];
 
         foreach ($stats as $index => $stat) {
-            $lines[] = "{$stat['name']} - Rounds: {$stat['total_rounds']}, Birdies: {$stat['total_birdies']}, Putts: {$stat['total_putts']}";
+            $lines[] = "{$stat['name']} - Rounds: {$stat['total_rounds']}, Birdies: {$stat['total_birdies']}, Avg Putts: {$stat['avg_putts']}";
         }
 
         $lines[] = '';

@@ -115,6 +115,25 @@
                 </div>
             </div>
 
+            <!-- Time Series Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Birdies Over Time Chart -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Cumulative Birdies Over Time</h3>
+                    <div class="h-80">
+                        <canvas id="birdiesOverTimeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Rounds Over Time Chart -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Cumulative Rounds Over Time</h3>
+                    <div class="h-80">
+                        <canvas id="roundsOverTimeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
             <!-- Individual User Stats Section -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div class="px-8 py-6 border-b border-gray-200">
@@ -150,9 +169,6 @@
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Avg Pars
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Putts
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Avg Putts
@@ -205,9 +221,6 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-600">{{ $stat->avg_pars_per_round ?? 0 }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $stat->total_putts }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-600">{{ $stat->avg_putts_per_round ?? 0 }}</div>
@@ -435,6 +448,112 @@
                         ticks: {
                             maxRotation: 45,
                             minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // Birdies Over Time Chart
+        const birdiesOverTimeData = {
+            labels: [
+                @foreach($birdiesOverTime as $dataPoint)
+                    '{{ \Carbon\Carbon::parse($dataPoint['date'])->format('M d, Y') }}',
+                @endforeach
+            ],
+            datasets: [{
+                label: 'Cumulative Birdies',
+                data: [
+                    @foreach($birdiesOverTime as $dataPoint)
+                        {{ $dataPoint['cumulative'] }},
+                    @endforeach
+                ],
+                backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                borderColor: 'rgba(14, 165, 233, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.3,
+                pointRadius: 3,
+                pointHoverRadius: 5
+            }]
+        };
+
+        new Chart(document.getElementById('birdiesOverTimeChart'), {
+            type: 'line',
+            data: birdiesOverTimeData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            maxTicksLimit: 10
+                        }
+                    }
+                }
+            }
+        });
+
+        // Rounds Over Time Chart
+        const roundsOverTimeData = {
+            labels: [
+                @foreach($roundsOverTime as $dataPoint)
+                    '{{ \Carbon\Carbon::parse($dataPoint['date'])->format('M d, Y') }}',
+                @endforeach
+            ],
+            datasets: [{
+                label: 'Cumulative Rounds',
+                data: [
+                    @foreach($roundsOverTime as $dataPoint)
+                        {{ $dataPoint['cumulative'] }},
+                    @endforeach
+                ],
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                borderColor: 'rgba(34, 197, 94, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.3,
+                pointRadius: 3,
+                pointHoverRadius: 5
+            }]
+        };
+
+        new Chart(document.getElementById('roundsOverTimeChart'), {
+            type: 'line',
+            data: roundsOverTimeData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            maxTicksLimit: 10
                         }
                     }
                 }
