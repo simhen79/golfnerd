@@ -112,40 +112,24 @@ class PublicStatsController extends Controller
             ->limit(10)
             ->get();
 
-        // Time series data for birdies over time
-        $birdiesOverTime = GolfRound::select(
-                'date_played',
-                DB::raw('SUM(birdies) as daily_birdies')
+        // Average birdies per round by week (trend data)
+        $avgBirdiesTrend = GolfRound::select(
+                DB::raw("DATE_TRUNC('week', date_played) as week_start"),
+                DB::raw('ROUND(SUM(birdies)::numeric / SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_birdies')
             )
-            ->groupBy('date_played')
-            ->orderBy('date_played')
-            ->get()
-            ->map(function ($item, $index) use (&$cumulativeBirdies) {
-                static $cumulative = 0;
-                $cumulative += $item->daily_birdies;
-                return [
-                    'date' => $item->date_played,
-                    'cumulative' => $cumulative
-                ];
-            });
+            ->groupBy('week_start')
+            ->orderBy('week_start')
+            ->get();
 
-        // Time series data for rounds over time
-        $roundsOverTime = GolfRound::select(
-                'date_played',
-                DB::raw('SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END) as daily_rounds')
+        // Rounds per week (activity trend data)
+        $roundsTrend = GolfRound::select(
+                DB::raw("DATE_TRUNC('week', date_played) as week_start"),
+                DB::raw('SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END) as total_rounds')
             )
-            ->groupBy('date_played')
-            ->orderBy('date_played')
-            ->get()
-            ->map(function ($item) {
-                static $cumulative = 0;
-                $cumulative += $item->daily_rounds;
-                return [
-                    'date' => $item->date_played,
-                    'cumulative' => $cumulative
-                ];
-            });
+            ->groupBy('week_start')
+            ->orderBy('week_start')
+            ->get();
 
-        return view('public-stats', compact('userStats', 'aggregateStats', 'topBirdies', 'topEagles', 'topRounds', 'leastPutts', 'birdiesOverTime', 'roundsOverTime'));
+        return view('public-stats', compact('userStats', 'aggregateStats', 'topBirdies', 'topEagles', 'topRounds', 'leastPutts', 'avgBirdiesTrend', 'roundsTrend'));
     }
 }

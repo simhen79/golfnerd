@@ -30,40 +30,24 @@
             <!-- Aggregate Stats Section -->
             <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Overall Stats</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="text-center">
                         <div class="text-3xl font-bold text-green-600">{{ $aggregateStats->total_rounds ?? 0 }}</div>
                         <div class="text-sm text-gray-600 mt-1">Total Rounds</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-yellow-600">{{ $aggregateStats->total_eagles ?? 0 }}</div>
-                        <div class="text-sm text-gray-600 mt-1">Eagles</div>
-                    </div>
-                    <div class="text-center">
                         <div class="text-3xl font-bold text-blue-600">{{ $aggregateStats->total_birdies ?? 0 }}</div>
-                        <div class="text-sm text-gray-600 mt-1">Birdies</div>
+                        <div class="text-sm text-gray-600 mt-1">Total Birdies</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-blue-600">{{ $aggregateStats->total_pars ?? 0 }}</div>
-                        <div class="text-sm text-gray-600 mt-1">Pars</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gray-600">{{ $aggregateStats->total_putts ?? 0 }}</div>
-                        <div class="text-sm text-gray-600 mt-1">Total Putts</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-orange-600">{{ $aggregateStats->total_bogeys ?? 0 }}</div>
-                        <div class="text-sm text-gray-600 mt-1">Bogeys</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-red-600">{{ $aggregateStats->total_double_bogeys ?? 0 }}</div>
-                        <div class="text-sm text-gray-600 mt-1">Double Bogeys+</div>
+                        <div class="text-3xl font-bold text-yellow-600">{{ $aggregateStats->total_eagles ?? 0 }}</div>
+                        <div class="text-sm text-gray-600 mt-1">Total Eagles</div>
                     </div>
                 </div>
 
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Averages Per Round</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="text-center">
                             <div class="text-2xl font-bold text-blue-600">{{ $aggregateStats->avg_birdies_per_round ?? 0 }}</div>
                             <div class="text-sm text-gray-600 mt-1">Avg Birdies</div>
@@ -115,21 +99,21 @@
                 </div>
             </div>
 
-            <!-- Time Series Charts Section -->
+            <!-- Trend Charts Section -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <!-- Birdies Over Time Chart -->
+                <!-- Average Birdies Per Round Trend -->
                 <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Cumulative Birdies Over Time</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Average Birdies Per Round (Weekly)</h3>
                     <div class="h-80">
-                        <canvas id="birdiesOverTimeChart"></canvas>
+                        <canvas id="avgBirdiesTrendChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Rounds Over Time Chart -->
+                <!-- Rounds Per Week Trend -->
                 <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Cumulative Rounds Over Time</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Rounds Played Per Week</h3>
                     <div class="h-80">
-                        <canvas id="roundsOverTimeChart"></canvas>
+                        <canvas id="roundsTrendChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -153,31 +137,13 @@
                                     Rounds
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Eagles
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Avg Eagles
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Birdies
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Avg Birdies
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Pars
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Avg Pars
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Avg Putts
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Bogeys
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Double Bogeys+
                                 </th>
                             </tr>
                         </thead>
@@ -205,36 +171,18 @@
                                         <div class="text-sm text-gray-900">{{ $stat->total_rounds }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $stat->total_eagles }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-600">{{ $stat->avg_eagles_per_round ?? 0 }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $stat->total_birdies }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-600">{{ $stat->avg_birdies_per_round ?? 0 }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $stat->total_pars }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-600">{{ $stat->avg_pars_per_round ?? 0 }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-600">{{ $stat->avg_putts_per_round ?? 0 }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $stat->total_bogeys }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $stat->total_double_bogeys }}</div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="px-6 py-8 text-center text-gray-500">
+                                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
                                         No statistics available yet. Be the first to track your golf rounds!
                                     </td>
                                 </tr>
@@ -454,18 +402,18 @@
             }
         });
 
-        // Birdies Over Time Chart
-        const birdiesOverTimeData = {
+        // Average Birdies Per Round Trend Chart
+        const avgBirdiesTrendData = {
             labels: [
-                @foreach($birdiesOverTime as $dataPoint)
-                    '{{ \Carbon\Carbon::parse($dataPoint['date'])->format('M d, Y') }}',
+                @foreach($avgBirdiesTrend as $dataPoint)
+                    '{{ \Carbon\Carbon::parse($dataPoint->week_start)->format('M d') }}',
                 @endforeach
             ],
             datasets: [{
-                label: 'Cumulative Birdies',
+                label: 'Avg Birdies Per Round',
                 data: [
-                    @foreach($birdiesOverTime as $dataPoint)
-                        {{ $dataPoint['cumulative'] }},
+                    @foreach($avgBirdiesTrend as $dataPoint)
+                        {{ $dataPoint->avg_birdies }},
                     @endforeach
                 ],
                 backgroundColor: 'rgba(14, 165, 233, 0.1)',
@@ -473,14 +421,14 @@
                 borderWidth: 2,
                 fill: true,
                 tension: 0.3,
-                pointRadius: 3,
-                pointHoverRadius: 5
+                pointRadius: 4,
+                pointHoverRadius: 6
             }]
         };
 
-        new Chart(document.getElementById('birdiesOverTimeChart'), {
+        new Chart(document.getElementById('avgBirdiesTrendChart'), {
             type: 'line',
-            data: birdiesOverTimeData,
+            data: avgBirdiesTrendData,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -493,32 +441,32 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 0.5
                         }
                     },
                     x: {
                         ticks: {
                             maxRotation: 45,
                             minRotation: 45,
-                            maxTicksLimit: 10
+                            maxTicksLimit: 12
                         }
                     }
                 }
             }
         });
 
-        // Rounds Over Time Chart
-        const roundsOverTimeData = {
+        // Rounds Per Week Trend Chart
+        const roundsTrendData = {
             labels: [
-                @foreach($roundsOverTime as $dataPoint)
-                    '{{ \Carbon\Carbon::parse($dataPoint['date'])->format('M d, Y') }}',
+                @foreach($roundsTrend as $dataPoint)
+                    '{{ \Carbon\Carbon::parse($dataPoint->week_start)->format('M d') }}',
                 @endforeach
             ],
             datasets: [{
-                label: 'Cumulative Rounds',
+                label: 'Rounds Played',
                 data: [
-                    @foreach($roundsOverTime as $dataPoint)
-                        {{ $dataPoint['cumulative'] }},
+                    @foreach($roundsTrend as $dataPoint)
+                        {{ $dataPoint->total_rounds }},
                     @endforeach
                 ],
                 backgroundColor: 'rgba(34, 197, 94, 0.1)',
@@ -526,14 +474,14 @@
                 borderWidth: 2,
                 fill: true,
                 tension: 0.3,
-                pointRadius: 3,
-                pointHoverRadius: 5
+                pointRadius: 4,
+                pointHoverRadius: 6
             }]
         };
 
-        new Chart(document.getElementById('roundsOverTimeChart'), {
+        new Chart(document.getElementById('roundsTrendChart'), {
             type: 'line',
-            data: roundsOverTimeData,
+            data: roundsTrendData,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -553,7 +501,7 @@
                         ticks: {
                             maxRotation: 45,
                             minRotation: 45,
-                            maxTicksLimit: 10
+                            maxTicksLimit: 12
                         }
                     }
                 }
