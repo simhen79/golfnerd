@@ -416,6 +416,11 @@
                         {{ $dataPoint->avg_birdies }},
                     @endforeach
                 ],
+                fullDates: [
+                    @foreach($avgBirdiesTrend as $dataPoint)
+                        '{{ \Carbon\Carbon::parse($dataPoint->week_start)->format('M d, Y') }}',
+                    @endforeach
+                ],
                 backgroundColor: 'rgba(14, 165, 233, 0.1)',
                 borderColor: 'rgba(14, 165, 233, 1)',
                 borderWidth: 2,
@@ -435,6 +440,13 @@
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return 'Week of ' + context[0].dataset.fullDates[context[0].dataIndex];
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -469,6 +481,11 @@
                         {{ $dataPoint->total_rounds }},
                     @endforeach
                 ],
+                fullDates: [
+                    @foreach($roundsTrend as $dataPoint)
+                        '{{ \Carbon\Carbon::parse($dataPoint->week_start)->format('M d, Y') }}',
+                    @endforeach
+                ],
                 backgroundColor: 'rgba(34, 197, 94, 0.1)',
                 borderColor: 'rgba(34, 197, 94, 1)',
                 borderWidth: 2,
@@ -488,6 +505,13 @@
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return 'Week of ' + context[0].dataset.fullDates[context[0].dataIndex];
+                            }
+                        }
                     }
                 },
                 scales: {
