@@ -102,6 +102,7 @@ class PublicStatsController extends Controller
 
         // Top 10 least putts (best putting average)
         $leastPutts = User::leftJoin('golf_rounds', 'users.id', '=', 'golf_rounds.user_id')
+            ->where('golf_rounds.putts', '>=', 18)
             ->select(
                 'users.name',
                 DB::raw('ROUND(SUM(golf_rounds.putts)::numeric / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_putts_per_round')
