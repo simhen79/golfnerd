@@ -26,7 +26,7 @@ class PublicStatsController extends Controller
                 DB::raw('ROUND(SUM(golf_rounds.pars)::numeric / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_pars_per_round'),
                 DB::raw('ROUND(SUM(golf_rounds.birdies)::numeric / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_birdies_per_round'),
                 DB::raw('ROUND(SUM(golf_rounds.eagles)::numeric / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_eagles_per_round'),
-                DB::raw('ROUND(SUM(golf_rounds.putts)::numeric / SUM(CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END), 2) as avg_putts_per_round')
+                DB::raw('ROUND(SUM(CASE WHEN golf_rounds.putts >= 18 THEN golf_rounds.putts ELSE 0 END)::numeric / NULLIF(SUM(CASE WHEN golf_rounds.putts >= 18 THEN (CASE WHEN golf_rounds.holes_played = 9 THEN 0.5 ELSE 1 END) ELSE 0 END), 0), 2) as avg_putts_per_round')
             )
             ->groupBy('users.id', 'users.name')
             ->get();
@@ -60,7 +60,7 @@ class PublicStatsController extends Controller
                 ROUND(COALESCE(SUM(birdies), 0)::numeric / NULLIF(SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END), 0), 2) as avg_birdies_per_round,
                 ROUND(COALESCE(SUM(eagles), 0)::numeric / NULLIF(SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END), 0), 2) as avg_eagles_per_round,
                 ROUND(COALESCE(SUM(pars), 0)::numeric / NULLIF(SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END), 0), 2) as avg_pars_per_round,
-                ROUND(COALESCE(SUM(putts), 0)::numeric / NULLIF(SUM(CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END), 0), 2) as avg_putts_per_round
+                ROUND(COALESCE(SUM(CASE WHEN putts >= 18 THEN putts ELSE 0 END), 0)::numeric / NULLIF(SUM(CASE WHEN putts >= 18 THEN (CASE WHEN holes_played = 9 THEN 0.5 ELSE 1 END) ELSE 0 END), 0), 2) as avg_putts_per_round
             ')
             ->first();
 
